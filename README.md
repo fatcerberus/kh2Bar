@@ -46,6 +46,12 @@ knows immediately, upon seeing the HP gauge, exactly how much effort will be
 required to take it out.  All without ever displaying an HP count!
 
 
+Advantages
+==========
+
+*Work in progress.*
+
+
 Examples
 ========
 
@@ -60,6 +66,7 @@ import { HPGauge } from './kh2Bar'
 
 // work in progress
 ```
+
 
 License
 =======

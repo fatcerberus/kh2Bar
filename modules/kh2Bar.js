@@ -9,29 +9,50 @@ import * as prim from 'prim';
 export
 class HPGauge
 {
-	constructor(capacity, sectorSize = 100, color = Color.Lime, maxSectors = 'auto')
+	constructor(x, y, width, height, options)
 	{
-		this.borderColor = Color.Black.fade(color.a);
-		this.capacity = capacity;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+
+		if (options != null) {
+			this.capacity = options.capacity !== undefined ? options.capacity : 0;
+			this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
+			this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
+			this.color = options.color !== undefined ? options.color : Color.Lime;
+		}
+
+		this.borderColor = Color.Black.fade(this.color.a);
+		this.capacity = this.capacity;
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
-		this.damageColor = new Color(0.75, 0.0, 0.0, color.a);
+		this.damageColor = new Color(0.75, 0.0, 0.0, this.color.a);
 		this.damageFadeness = 1.0;
 		this.drainSpeed = 2.0;
-		this.emptyColor = new Color(0.125, 0.125, 0.125, color.a);
+		this.emptyColor = new Color(0.125, 0.125, 0.125, this.color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
-		this.hpColor = color.clone();
+		this.hpColor = this.color.clone();
 		this.isVisible = true;
-		this.maxSectors = maxSectors;
-		this.newColor = color;
+		this.maxSectors = this.maxSectors;
+		this.newColor = this.color;
 		this.newReading = this.capacity;
 		this.numCombosRunning = 0;
-		this.oldColor = color;
+		this.oldColor = this.color;
 		this.oldReading = this.capacity;
 		this.reading = this.capacity;
-		this.sectorSize = sectorSize;
+		this.sectorSize = this.sectorSize;
+
+		this.updateJob = Dispatch.onUpdate(this.update.bind(this));
+		this.renderJob = Dispatch.onRender(this.render.bind(this));
+	}
+	
+	dispose()
+	{
+		Dispatch.cancel(this.updateJob);
+		Dispatch.cancel(this.renderJob);
 	}
 
 	beginCombo()
@@ -48,67 +69,6 @@ class HPGauge
 			this.colorFadeTimer = 0;
 		} else {
 			this.hpColor = this.newColor;
-		}
-	}
-
-	draw(x, y, width, height)
-	{
-		if (this.fadeness >= 1.0)
-			return;  // invisible, skip rendering
-		var damageShown = Math.max(this.damage - (this.reading - this.newReading), 0);
-		var numReserves = Math.ceil(this.capacity / this.sectorSize - 1);
-		var numReservesFilled = Math.max(Math.ceil(this.reading / this.sectorSize - 1), 0);
-		var numReservesDamaged = Math.ceil((damageShown + this.reading) / this.sectorSize - 1);
-		var barInUse;
-		if (numReservesFilled == numReserves) {
-			barInUse = this.capacity % this.sectorSize;
-			if (barInUse == 0) {
-				barInUse = this.sectorSize;
-			}
-		} else {
-			barInUse = this.sectorSize;
-		}
-		var barFilled = this.reading % this.sectorSize;
-		if (barFilled == 0 && this.reading > 0) {
-			barFilled = barInUse;
-		}
-		var barDamaged = Math.min(damageShown, this.sectorSize - barFilled);
-		var barHeight = Math.ceil(height * 0.5 + 0.5);
-		var widthInUse = Math.round((width - 2) * barInUse / this.sectorSize);
-		var fillWidth = Math.ceil(widthInUse * barFilled / barInUse);
-		var damageWidth = Math.ceil(widthInUse * (barFilled + barDamaged) / barInUse) - fillWidth;
-		var emptyWidth = widthInUse - (fillWidth + damageWidth);
-		var borderColor = fadeColor(this.borderColor, this.fadeness);
-		var fillColor = fadeColor(this.hpColor, this.fadeness);
-		var emptyColor = fadeColor(this.emptyColor, this.fadeness);
-		var usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
-		if (barInUse < this.sectorSize && numReservesFilled > 0) {
-			prim.lineRect(screen, x, y, width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 25, 75));
-			drawSegment(x + 1, y + 1, width - 2, barHeight - 2, Color.mix(fillColor, Color.Transparent, 25, 75));
-		}
-		var barEdgeX = x + width - 1;
-		prim.lineRect(screen, barEdgeX - widthInUse - 1, y, widthInUse + 2, barHeight, 1, borderColor);
-		drawSegment(barEdgeX - fillWidth, y + 1, fillWidth, barHeight - 2, fillColor);
-		drawSegment(barEdgeX - fillWidth - damageWidth, y + 1, damageWidth, barHeight - 2, usageColor);
-		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, y + 1, emptyWidth, barHeight - 2, emptyColor);
-		var slotYSize = height - barHeight + 1;
-		var slotXSize = this.maxSectors === 'auto'
-			? Math.round(slotYSize * 1.25)
-			: Math.ceil(width / (this.maxSectors - 1));
-		var slotX;
-		var slotY = y + height - slotYSize;
-		for (var i = 0; i < numReserves; ++i) {
-			var color;
-			if (i < numReservesFilled) {
-				color = fillColor;
-			} else if (i < numReservesDamaged) {
-				color = usageColor;
-			} else {
-				color = emptyColor;
-			}
-			slotX = x + (width - slotXSize) - i * (slotXSize - 1);
-			prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
-			drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 		}
 	}
 
@@ -155,6 +115,67 @@ class HPGauge
 		}
 	}
 
+	render()
+	{
+		if (this.fadeness >= 1.0)
+			return;  // invisible, skip rendering
+		var damageShown = Math.max(this.damage - (this.reading - this.newReading), 0);
+		var numReserves = Math.ceil(this.capacity / this.sectorSize - 1);
+		var numReservesFilled = Math.max(Math.ceil(this.reading / this.sectorSize - 1), 0);
+		var numReservesDamaged = Math.ceil((damageShown + this.reading) / this.sectorSize - 1);
+		var barInUse;
+		if (numReservesFilled == numReserves) {
+			barInUse = this.capacity % this.sectorSize;
+			if (barInUse == 0) {
+				barInUse = this.sectorSize;
+			}
+		} else {
+			barInUse = this.sectorSize;
+		}
+		var barFilled = this.reading % this.sectorSize;
+		if (barFilled == 0 && this.reading > 0) {
+			barFilled = barInUse;
+		}
+		var barDamaged = Math.min(damageShown, this.sectorSize - barFilled);
+		var barHeight = Math.ceil(this.height * 0.5 + 0.5);
+		var widthInUse = Math.round((this.width - 2) * barInUse / this.sectorSize);
+		var fillWidth = Math.ceil(widthInUse * barFilled / barInUse);
+		var damageWidth = Math.ceil(widthInUse * (barFilled + barDamaged) / barInUse) - fillWidth;
+		var emptyWidth = widthInUse - (fillWidth + damageWidth);
+		var borderColor = fadeColor(this.borderColor, this.fadeness);
+		var fillColor = fadeColor(this.hpColor, this.fadeness);
+		var emptyColor = fadeColor(this.emptyColor, this.fadeness);
+		var usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
+		if (barInUse < this.sectorSize && numReservesFilled > 0) {
+			prim.lineRect(screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
+			drawSegment(this.x + 1, this.y + 1, this.width - 2, barHeight - 2, Color.mix(fillColor, Color.Transparent, 50, 50));
+		}
+		var barEdgeX = this.x + this.width - 1;
+		prim.lineRect(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
+		drawSegment(barEdgeX - fillWidth, this.y + 1, fillWidth, barHeight - 2, fillColor);
+		drawSegment(barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
+		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, this.y + 1, emptyWidth, barHeight - 2, emptyColor);
+		var slotYSize = this.height - barHeight + 1;
+		var slotXSize = this.maxSectors === 'auto'
+			? Math.round(slotYSize * 1.25)
+			: Math.ceil(this.width / (this.maxSectors - 1));
+		var slotX;
+		var slotY = this.y + this.height - slotYSize;
+		for (var i = 0; i < numReserves; ++i) {
+			var color;
+			if (i < numReservesFilled) {
+				color = fillColor;
+			} else if (i < numReservesDamaged) {
+				color = usageColor;
+			} else {
+				color = emptyColor;
+			}
+			slotX = this.x + (this.width - slotXSize) - i * (slotXSize - 1);
+			prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
+			drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
+		}
+	}
+
 	update()
 	{
 		++this.colorFadeTimer;
@@ -186,7 +207,7 @@ class HPGauge
 
 function drawSegment(x, y, width, height, color)
 {
-	let topHeight = Math.ceil(height / 4);
+	let topHeight = Math.ceil(height / 8);
 	let bottomHeight = height - topHeight;
 	let yBottom = y + topHeight;
 	let dimColor = Color.mix(color, Color.Black.fade(color.a), 66, 33);
