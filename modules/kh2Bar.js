@@ -20,11 +20,10 @@ class HPGauge
 			this.capacity = options.capacity !== undefined ? options.capacity : 0;
 			this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
 			this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
-			this.color = options.color !== undefined ? options.color : Color.Lime;
+			this.color = options.color !== undefined ? options.color : Color.Chartreuse;
 		}
 
 		this.borderColor = Color.Black.fade(this.color.a);
-		this.capacity = this.capacity;
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
@@ -55,10 +54,7 @@ class HPGauge
 		Dispatch.cancel(this.renderJob);
 	}
 
-	beginCombo()
-	{
-		++this.numCombosRunning;
-	}
+	get inCombo() { return this.numCombosRunning > 0; }
 
 	changeColor(color, numFrames = 0)
 	{
@@ -74,10 +70,8 @@ class HPGauge
 
 	endCombo()
 	{
-		--this.numCombosRunning;
-		if (this.numCombosRunning < 0) {
+		if (--this.numCombosRunning < 0)
 			this.numCombosRunning = 0;
-		}
 	}
 
 	hide(duration = 0.0)
@@ -95,7 +89,7 @@ class HPGauge
 		value = Math.min(Math.max(Math.round(value), 0), this.capacity);
 		if (value != this.reading) {
 			if (this.numCombosRunning > 0)
-				this.damage += this.reading - value;
+				this.damage += this.newReading - value;
 			else
 				this.damage = this.reading - value;
 			this.damageFadeness = 0.0;
@@ -113,6 +107,11 @@ class HPGauge
 			this.fadeSpeed = 0.0;
 			this.fadeness = 0.0;
 		}
+	}
+
+	startCombo()
+	{
+		++this.numCombosRunning;
 	}
 
 	render()
