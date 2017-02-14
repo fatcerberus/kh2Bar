@@ -1,0 +1,10 @@
+[.ssproj]
+author=Bruce Pascoe
+buildDir=./dist/
+compiler=Cell
+description=
+mainScript=main.js
+name=kh2Bar
+screenHeight=240
+screenWidth=320
+
