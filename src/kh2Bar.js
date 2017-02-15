@@ -1,6 +1,6 @@
 /**
  *  kh2Bar JavaScript module for Sphere v2
- *  Kingdom Hearts-style HP gauge with multiple lifebars
+ *  Kingdom Hearts-style HP gauges with multiple lifebars
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
@@ -11,6 +11,8 @@ class HPGauge
 {
 	constructor(x, y, width, height, options)
 	{
+		var priority = 0;
+		
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -20,17 +22,18 @@ class HPGauge
 			this.capacity = options.capacity !== undefined ? options.capacity : 0;
 			this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
 			this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
-			this.color = options.color !== undefined ? options.color : Color.Chartreuse;
+			this.color = options.color !== undefined ? options.color : Color.Lime;
+			priority = options.priority !== undefined ? options.priority : 0;
 		}
 
 		this.borderColor = Color.Black.fade(this.color.a);
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
-		this.damageColor = new Color(0.75, 0.0, 0.0, this.color.a);
+		this.damageColor = Color.FireBrick.fade(this.color.a);
 		this.damageFadeness = 1.0;
 		this.drainSpeed = 2.0;
-		this.emptyColor = new Color(0.125, 0.125, 0.125, this.color.a);
+		this.emptyColor = Color.of('#202020').fade(this.color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
 		this.hpColor = this.color.clone();
@@ -44,8 +47,8 @@ class HPGauge
 		this.reading = this.capacity;
 		this.sectorSize = this.sectorSize;
 
-		this.updateJob = Dispatch.onUpdate(this.update.bind(this));
-		this.renderJob = Dispatch.onRender(this.render.bind(this));
+		this.updateJob = Dispatch.onUpdate(this.update.bind(this), priority);
+		this.renderJob = Dispatch.onRender(this.render.bind(this), priority);
 	}
 	
 	dispose()

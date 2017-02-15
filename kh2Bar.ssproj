@@ -1,10 +1,10 @@
 [.ssproj]
-author=Bruce Pascoe
+author=Fat Cerberus
 buildDir=./dist/
 compiler=Cell
 description=
 mainScript=main.js
-name=kh2Bar
+name=kh2Bar Showcase
 screenHeight=240
 screenWidth=320
 

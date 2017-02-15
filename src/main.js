@@ -1,6 +1,6 @@
 /**
- *  kh2Bar showcase demo for Sphere v2
- *  Kingdom Hearts-style HP gauge with multiple lifebars
+ *  kh2Bar Showcase demo for Sphere v2
+ *  Kingdom Hearts-style HP gauges with multiple lifebars
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
@@ -22,15 +22,16 @@ const GaugeColors =
 	Color.White,
 ];
 
+const Background = new Image('images/justSaiyan.png');
+
 var colorID = 0;
 var font = Font.Default;
-var hp = 3600, damage = 0;
+var hp = 812, damage = 0;
 var isHidden = false;
-var lastDamage = 0;
 var comboTimer = 0;
 var lifeBar = new HPGauge(160, 10, 150, 12, {
 	capacity:   hp,
-	sectorSize: 500,
+	sectorSize: 100,
 	maxSectors: 'auto',
 	color:      GaugeColors[colorID],
 	priority:   1,
@@ -44,27 +45,29 @@ Dispatch.onRender(handleRender);
 // animated and rendered for us.
 lifeBar.show();
 
+function drawShadowText(surface, x, y, text, color = Color.White)
+{
+	font.drawText(surface, x + 1, y + 1, text, Color.Black.fade(color.a));
+	font.drawText(surface, x, y, text, color);
+}
+
 function handleUpdate()
 {
-	if (lifeBar.inCombo && screen.now() >= comboTimer + 30) {
+	if (lifeBar.inCombo && screen.now() >= comboTimer + 30)
 		lifeBar.endCombo();
-		lastDamage = 0;
-	}
 	let key = Keyboard.Default.getKey();
 	let damage;
 	switch (key) {
-		case Key.A:
-			damage = Math.round(random.normal(10, 2));
-			lastDamage += damage;
+		case Key.Z:
+			damage = Math.round(random.normal(2, 1));
 			hp = Math.max(hp - damage, 0);
 			comboTimer = screen.now();
 			if (!lifeBar.inCombo)
 				lifeBar.startCombo();
 			lifeBar.set(hp);
 			break;
-		case Key.S:
-			damage = Math.round(random.normal(50, 10));
-			lastDamage += damage;
+		case Key.X:
+			damage = Math.round(random.normal(25, 10));
 			hp = Math.max(hp - damage, 0);
 			comboTimer = screen.now();
 			if (!lifeBar.inCombo)
@@ -87,11 +90,10 @@ function handleUpdate()
 
 function handleRender()
 {
-	font.drawText(screen, 10, 45, `HP: ${hp}`);
-	font.drawText(screen, 100, 40, "press A to attack");
-	font.drawText(screen, 100, 52, "press S for critical hit");
-	font.drawText(screen, 100, 64, "press V to show or hide");
-	font.drawText(screen, 100, 76, "press C to change color");
-	if (lastDamage > 0)
-		font.drawText(screen, 100, 100, `${lastDamage} damage!`);
+	prim.blit(screen, 0, 0, Background);
+	prim.rect(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
+	drawShadowText(screen, 10, 100, "press Z to attack");
+	drawShadowText(screen, 10, 112, "press X to crit");
+	drawShadowText(screen, 10, 124, "press V to show/hide");
+	drawShadowText(screen, 10, 136, "press C to recolor");
 }

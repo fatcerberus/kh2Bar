@@ -6,11 +6,13 @@
 
 import transpile from 'transpile';
 
-describe("kh2Bar Demo",
+describe("kh2Bar Showcase",
 {
 	author:     "Fat Cerberus",
 	resolution: '320x240',
-	main:       'modules/main.js',
+	main:       'scripts/main.js',
 });
 
-transpile('@/modules', files('modules/*.js', true));
+transpile('@/scripts', files('src/*.js', true));
+
+install('@/images', files('images/*.png', true));
