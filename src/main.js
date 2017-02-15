@@ -6,6 +6,7 @@
 
 import { HPGauge } from './kh2Bar';
 
+import term        from 'term';
 import * as prim   from 'prim';
 import * as random from 'random';
 

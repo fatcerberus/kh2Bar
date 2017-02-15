@@ -39,10 +39,10 @@ class HPGauge
 		this.hpColor = this.color.clone();
 		this.isVisible = true;
 		this.maxSectors = this.maxSectors;
-		this.newColor = this.color;
+		this.newColor = this.color.clone();
 		this.newReading = this.capacity;
 		this.numCombosRunning = 0;
-		this.oldColor = this.color;
+		this.oldColor = this.color.clone();
 		this.oldReading = this.capacity;
 		this.reading = this.capacity;
 		this.sectorSize = this.sectorSize;

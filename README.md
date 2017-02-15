@@ -55,16 +55,14 @@ Advantages
 Examples
 ========
 
+*Work in progress.*
+
 kh2Bar is easy to use.  Simply add `kh2Bar.js` to your project, ensure it gets
 transpiled using Cell's `transpile` module and import it using either an
 `import` statement or a `require()` call:
 
 ```js
 import { HPGauge } from './kh2Bar'
-// -OR-:
-// const HPGauge = require('kh2Bar').HPGauge;
-
-// work in progress
 ```
 
 
