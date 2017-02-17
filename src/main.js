@@ -1,6 +1,6 @@
 /**
- *  kh2Bar Showcase demo for Sphere v2
- *  Kingdom Hearts-style HP gauges with multiple lifebars
+ *  kh2Bar showcase demo for Sphere v2
+ *  Kingdom Hearts-style HP gauge with multiple lifebars
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
@@ -27,7 +27,7 @@ const Background = new Image('images/justSaiyan.png');
 
 var colorID = 0;
 var font = Font.Default;
-var hp = 812, damage = 0;
+var hp = 812;
 var isHidden = false;
 var comboTimer = 0;
 var lifeBar = new HPGauge(160, 10, 150, 12, {
@@ -68,7 +68,7 @@ function handleUpdate()
 			lifeBar.set(hp);
 			break;
 		case Key.X:
-			damage = Math.round(random.normal(25, 10));
+			damage = Math.round(random.normal(10, 5));
 			hp = Math.max(hp - damage, 0);
 			comboTimer = screen.now();
 			if (!lifeBar.inCombo)

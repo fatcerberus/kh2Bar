@@ -30,7 +30,7 @@ class HPGauge
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
-		this.damageColor = Color.FireBrick.fade(this.color.a);
+		this.damageColor = Color.DarkRed.fade(this.color.a);
 		this.damageFadeness = 1.0;
 		this.drainSpeed = 2.0;
 		this.emptyColor = Color.of('#202020').fade(this.color.a);
@@ -98,7 +98,7 @@ class HPGauge
 			this.damageFadeness = 0.0;
 			this.oldReading = this.reading;
 			this.newReading = value;
-			this.drainTimer = 0.0;
+			this.drainTimer = value > this.reading ? 0.0 : 1.0;  // HACK
 		}
 	}
 
@@ -138,7 +138,7 @@ class HPGauge
 		if (barFilled == 0 && this.reading > 0) {
 			barFilled = barInUse;
 		}
-		var barDamaged = Math.min(damageShown, this.sectorSize - barFilled);
+		var barDamaged = Math.min(damageShown, this.sectorSize - barFilled) * (1.0 - this.damageFadeness);
 		var barHeight = Math.ceil(this.height * 0.5 + 0.5);
 		var widthInUse = Math.round((this.width - 2) * barInUse / this.sectorSize);
 		var fillWidth = Math.ceil(widthInUse * barFilled / barInUse);
@@ -155,7 +155,7 @@ class HPGauge
 		var barEdgeX = this.x + this.width - 1;
 		prim.lineRect(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
 		drawSegment(barEdgeX - fillWidth, this.y + 1, fillWidth, barHeight - 2, fillColor);
-		drawSegment(barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
+		prim.rect(screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
 		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, this.y + 1, emptyWidth, barHeight - 2, emptyColor);
 		var slotYSize = this.height - barHeight + 1;
 		var slotXSize = this.maxSectors === 'auto'
@@ -174,7 +174,10 @@ class HPGauge
 			}
 			slotX = this.x + (this.width - slotXSize) - i * (slotXSize - 1);
 			prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
-			drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
+			if (color != usageColor)
+				drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
+			else
+				prim.rect(screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 		}
 	}
 
@@ -198,7 +201,7 @@ class HPGauge
 			this.reading = this.newReading;
 		}
 		if (this.numCombosRunning <= 0 && this.reading == this.newReading) {
-			this.damageFadeness += 1.0 / screen.frameRate;
+			this.damageFadeness += 2.0 / screen.frameRate;
 			if (this.damageFadeness >= 1.0) {
 				this.damage = 0;
 				this.damageFadeness = 1.0;
