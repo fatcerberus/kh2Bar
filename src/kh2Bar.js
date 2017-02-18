@@ -32,8 +32,8 @@ class HPGauge
 		this.damage = 0;
 		this.damageColor = Color.DarkRed.fade(this.color.a);
 		this.damageFadeness = 1.0;
-		this.drainSpeed = 2.0;
-		this.emptyColor = Color.of('#202020').fade(this.color.a);
+		this.drainSpeed = 3.0;
+		this.emptyColor = Color.of('#303030').fade(this.color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
 		this.hpColor = this.color.clone();
@@ -98,7 +98,7 @@ class HPGauge
 			this.damageFadeness = 0.0;
 			this.oldReading = this.reading;
 			this.newReading = value;
-			this.drainTimer = value > this.reading ? 0.0 : 1.0;  // HACK
+			this.drainTimer = 0.0;
 		}
 	}
 
@@ -163,6 +163,8 @@ class HPGauge
 			: Math.ceil(this.width / (this.maxSectors - 1));
 		var slotX;
 		var slotY = this.y + this.height - slotYSize;
+		prim.rect(screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
+		prim.rect(screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
 		for (var i = 0; i < numReserves; ++i) {
 			var color;
 			if (i < numReservesFilled) {
@@ -172,7 +174,7 @@ class HPGauge
 			} else {
 				color = emptyColor;
 			}
-			slotX = this.x + (this.width - slotXSize) - i * (slotXSize - 1);
+			slotX = this.x + (this.width - slotXSize) - (i + 1) * (slotXSize - 1);
 			prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
 			if (color != usageColor)
 				drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
@@ -194,14 +196,14 @@ class HPGauge
 			this.colorFadeDuration = 0;
 		}
 		this.fadeness = Math.min(Math.max(this.fadeness + this.fadeSpeed / screen.frameRate, 0.0), 1.0);
-		this.drainTimer += 1.0 / this.drainSpeed / screen.frameRate;
+		this.drainTimer += this.drainSpeed / screen.frameRate;
 		if (this.newReading != this.reading && this.drainTimer < 0.25) {
 			this.reading = Math.round(tween(this.oldReading, this.drainTimer, 0.25, this.newReading));
 		} else {
 			this.reading = this.newReading;
 		}
 		if (this.numCombosRunning <= 0 && this.reading == this.newReading) {
-			this.damageFadeness += 2.0 / screen.frameRate;
+			this.damageFadeness += this.drainSpeed / screen.frameRate;
 			if (this.damageFadeness >= 1.0) {
 				this.damage = 0;
 				this.damageFadeness = 1.0;

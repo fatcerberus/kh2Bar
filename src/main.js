@@ -15,19 +15,18 @@ import * as random from 'random';
 const GaugeColors =
 [
 	Color.Chartreuse,
-	Color.Red,
 	Color.Yellow,
-	Color.Cyan,
-	Color.DodgerBlue,
+	Color.Orange,
+	Color.Red,
 	Color.Magenta,
 	Color.White,
 ];
 
-const Background = new Image('images/justSaiyan.png');
+const Background = new Texture('images/justSaiyan.png');
 
 var colorID = 0;
 var font = Font.Default;
-var hp = 812;
+var hp = 1275;
 var isHidden = false;
 var comboTimer = 0;
 var lifeBar = new HPGauge(160, 10, 150, 12, {
@@ -60,7 +59,7 @@ function handleUpdate()
 	let damage;
 	switch (key) {
 		case Key.Z:
-			damage = Math.round(random.normal(2, 1));
+			damage = Math.round(random.discrete(1, 3));
 			hp = Math.max(hp - damage, 0);
 			comboTimer = screen.now();
 			if (!lifeBar.inCombo)
@@ -68,7 +67,7 @@ function handleUpdate()
 			lifeBar.set(hp);
 			break;
 		case Key.X:
-			damage = Math.round(random.normal(10, 5));
+			damage = Math.round(random.discrete(20, 30));
 			hp = Math.max(hp - damage, 0);
 			comboTimer = screen.now();
 			if (!lifeBar.inCombo)
