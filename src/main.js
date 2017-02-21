@@ -10,23 +10,22 @@ import term        from 'term';
 import * as prim   from 'prim';
 import * as random from 'random';
 
-// colors used to showcase the "color change" feature.
-// press Tab to cycle colors.
+// let me just say how awesome it is that KH uses chartreuse to
+// color HP gauges rather than pure green.  very classy.
 const GaugeColors =
 [
 	Color.Chartreuse,
+	Color.Turquoise,
 	Color.Yellow,
-	Color.Orange,
-	Color.Red,
-	Color.Magenta,
-	Color.White,
+	Color.Salmon,
+	Color.HotPink,
 ];
 
 const Background = new Texture('images/justSaiyan.png');
 
 var colorID = 0;
 var font = Font.Default;
-var hp = 1275;
+var hp = 812;
 var isHidden = false;
 var comboTimer = 0;
 var lifeBar = new HPGauge(160, 10, 150, 12, {
@@ -69,10 +68,9 @@ function handleUpdate()
 		case Key.X:
 			damage = Math.round(random.discrete(20, 30));
 			hp = Math.max(hp - damage, 0);
-			comboTimer = screen.now();
-			if (!lifeBar.inCombo)
-				lifeBar.startCombo();
 			lifeBar.set(hp);
+			if (lifeBar.inCombo)
+				lifeBar.endCombo();
 			break;
 		case Key.C:
 			colorID = (colorID + 1) % GaugeColors.length;
