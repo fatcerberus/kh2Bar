@@ -15,7 +15,7 @@ import * as random from 'random';
 const GaugeColors =
 [
 	Color.Chartreuse,
-	Color.Turquoise,
+	Color.PurwaBlue,
 	Color.Yellow,
 	Color.Salmon,
 	Color.HotPink,

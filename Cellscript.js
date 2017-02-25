@@ -10,9 +10,9 @@ describe("kh2Bar Showcase",
 {
 	author:     "Fat Cerberus",
 	resolution: '320x240',
-	main:       'scripts/main.js',
+	main:       'bin/main.mjs',
 });
 
-transpile('@/scripts', files('src/*.js', true));
+transpile('@/bin', files('src/*.mjs', true));
 
 install('@/images', files('images/*.png', true));

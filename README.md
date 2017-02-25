@@ -43,9 +43,9 @@ Examples
 
 *Work in progress.*
 
-kh2Bar is easy to use.  Simply add `kh2Bar.js` to your project, ensure it gets
+kh2Bar is easy to use.  Simply add `kh2Bar.mjs` to your project, ensure it gets
 transpiled using Cell's `transpile` module and import it using either an
-`import` statement or a `require()` call:
+`import` statement (ES6 modules only) or a `require()` call:
 
 ```js
 import { HPGauge } from './kh2Bar'
