@@ -9,7 +9,7 @@ import * as prim from 'prim';
 export
 class HPGauge
 {
-	constructor(x, y, width, height, options)
+	constructor(x, y, width, height, options = {})
 	{
 		var priority = 0;
 		
@@ -18,16 +18,14 @@ class HPGauge
 		this.width = width;
 		this.height = height;
 
-		if (options != null) {
-			// note: using chartreuse as the default color here isn't just me being
-			//       a joker: the Kingdom Hearts games themselves actually use chartreuse
-			//       for HP gauges, NOT pure green.  classy!
-			this.capacity = options.capacity !== undefined ? options.capacity : 0;
-			this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
-			this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
-			this.color = options.color !== undefined ? options.color : Color.Chartreuse;
-			priority = options.priority !== undefined ? options.priority : 0;
-		}
+		// note: using chartreuse as the default color here isn't just me being
+		//       a joker: the Kingdom Hearts games themselves actually use chartreuse
+		//       for HP gauges, NOT pure green.  classy!
+		this.capacity = options.capacity !== undefined ? options.capacity : 0;
+		this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
+		this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
+		this.color = options.color !== undefined ? options.color : Color.Chartreuse;
+		priority = options.priority !== undefined ? options.priority : 0;
 
 		this.borderColor = Color.Black.fade(this.color.a);
 		this.colorFadeDuration = 0;
