@@ -4,7 +4,7 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import transpile from 'transpile';
+import { transpile } from 'compiler';
 
 describe("kh2Bar Showcase",
 {
