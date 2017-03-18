@@ -11,8 +11,6 @@ class HPGauge
 {
 	constructor(x, y, width, height, options = {})
 	{
-		var priority = 0;
-		
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -24,32 +22,32 @@ class HPGauge
 		this.capacity = options.capacity !== undefined ? options.capacity : 0;
 		this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
 		this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
-		this.color = options.color !== undefined ? options.color : Color.Chartreuse;
-		priority = options.priority !== undefined ? options.priority : 0;
+		let color = options.color !== undefined ? options.color : Color.Chartreuse;
+		let priority = options.priority !== undefined ? options.priority : 0;
 
-		this.borderColor = Color.Black.fade(this.color.a);
+		this.borderColor = Color.Black.fade(color.a);
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
-		this.damageColor = Color.DarkRed.fade(this.color.a);
+		this.damageColor = Color.DarkRed.fade(color.a);
 		this.damageFadeness = 1.0;
 		this.drainSpeed = 3.0;
-		this.emptyColor = Color.of('#303030').fade(this.color.a);
+		this.emptyColor = Color.of('#303030').fade(color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
-		this.hpColor = this.color.clone();
+		this.hpColor = color.clone();
 		this.isVisible = true;
 		this.maxSectors = this.maxSectors;
-		this.newColor = this.color.clone();
+		this.newColor = color.clone();
 		this.newReading = this.capacity;
 		this.numCombosRunning = 0;
-		this.oldColor = this.color.clone();
+		this.oldColor = color.clone();
 		this.oldReading = this.capacity;
 		this.reading = this.capacity;
 		this.sectorSize = this.sectorSize;
 
-		this.updateJob = Dispatch.onUpdate(this.update.bind(this), priority);
-		this.renderJob = Dispatch.onRender(this.render.bind(this), priority);
+		this.updateJob = Dispatch.onUpdate(() => this.update(), priority);
+		this.renderJob = Dispatch.onRender(() => this.render(), priority);
 	}
 	
 	dispose()
@@ -122,11 +120,11 @@ class HPGauge
 	{
 		if (this.fadeness >= 1.0)
 			return;  // invisible, skip rendering
-		var damageShown = Math.max(this.damage - (this.reading - this.newReading), 0);
-		var numReserves = Math.ceil(this.capacity / this.sectorSize - 1);
-		var numReservesFilled = Math.max(Math.ceil(this.reading / this.sectorSize - 1), 0);
-		var numReservesDamaged = Math.ceil((damageShown + this.reading) / this.sectorSize - 1);
-		var barInUse;
+		let damageShown = Math.max(this.damage - (this.reading - this.newReading), 0);
+		let numReserves = Math.ceil(this.capacity / this.sectorSize - 1);
+		let numReservesFilled = Math.max(Math.ceil(this.reading / this.sectorSize - 1), 0);
+		let numReservesDamaged = Math.ceil((damageShown + this.reading) / this.sectorSize - 1);
+		let barInUse;
 		if (numReservesFilled == numReserves) {
 			barInUse = this.capacity % this.sectorSize;
 			if (barInUse == 0) {
@@ -135,39 +133,39 @@ class HPGauge
 		} else {
 			barInUse = this.sectorSize;
 		}
-		var barFilled = this.reading % this.sectorSize;
+		let barFilled = this.reading % this.sectorSize;
 		if (barFilled == 0 && this.reading > 0) {
 			barFilled = barInUse;
 		}
-		var barDamaged = Math.min(damageShown, this.sectorSize - barFilled) * (1.0 - this.damageFadeness);
-		var barHeight = Math.ceil(this.height * 0.5 + 0.5);
-		var widthInUse = Math.round((this.width - 2) * barInUse / this.sectorSize);
-		var fillWidth = Math.ceil(widthInUse * barFilled / barInUse);
-		var damageWidth = Math.ceil(widthInUse * (barFilled + barDamaged) / barInUse) - fillWidth;
-		var emptyWidth = widthInUse - (fillWidth + damageWidth);
-		var borderColor = fadeColor(this.borderColor, this.fadeness);
-		var fillColor = fadeColor(this.hpColor, this.fadeness);
-		var emptyColor = fadeColor(this.emptyColor, this.fadeness);
-		var usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
+		let barDamaged = Math.min(damageShown, this.sectorSize - barFilled) * (1.0 - this.damageFadeness);
+		let barHeight = Math.ceil(this.height * 0.5 + 0.5);
+		let widthInUse = Math.round((this.width - 2) * barInUse / this.sectorSize);
+		let fillWidth = Math.ceil(widthInUse * barFilled / barInUse);
+		let damageWidth = Math.ceil(widthInUse * (barFilled + barDamaged) / barInUse) - fillWidth;
+		let emptyWidth = widthInUse - (fillWidth + damageWidth);
+		let borderColor = fadeColor(this.borderColor, this.fadeness);
+		let fillColor = fadeColor(this.hpColor, this.fadeness);
+		let emptyColor = fadeColor(this.emptyColor, this.fadeness);
+		let usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
 		if (barInUse < this.sectorSize && numReservesFilled > 0) {
 			prim.lineRect(screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
 			drawSegment(this.x + 1, this.y + 1, this.width - 2, barHeight - 2, Color.mix(fillColor, Color.Transparent, 50, 50));
 		}
-		var barEdgeX = this.x + this.width - 1;
+		let barEdgeX = this.x + this.width - 1;
 		prim.lineRect(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
 		drawSegment(barEdgeX - fillWidth, this.y + 1, fillWidth, barHeight - 2, fillColor);
 		prim.rect(screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
 		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, this.y + 1, emptyWidth, barHeight - 2, emptyColor);
-		var slotYSize = this.height - barHeight + 1;
-		var slotXSize = this.maxSectors === 'auto'
+		let slotYSize = this.height - barHeight + 1;
+		let slotXSize = this.maxSectors === 'auto'
 			? Math.round(slotYSize * 1.25)
 			: Math.ceil(this.width / (this.maxSectors - 1));
-		var slotX;
-		var slotY = this.y + this.height - slotYSize;
+		let slotX;
+		let slotY = this.y + this.height - slotYSize;
 		prim.rect(screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
 		prim.rect(screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
-		for (var i = 0; i < numReserves; ++i) {
-			var color;
+		for (let i = 0; i < numReserves; ++i) {
+			let color;
 			if (i < numReservesFilled) {
 				color = fillColor;
 			} else if (i < numReservesDamaged) {
