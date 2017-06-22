@@ -1,16 +1,18 @@
 /**
- *  kh2Bar JavaScript module for Sphere v2
+ *  kh2Bar JavaScript module for Sphere
  *  Kingdom Hearts-style HP gauges with multiple lifebars
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import * as prim from 'prim';
+import { Prim, Thread } from 'sphere-runtime';
 
 export
-class HPGauge
+class HPGauge extends Thread
 {
 	constructor(x, y, width, height, options = {})
 	{
+		super({ priority: options.priority });
+		
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -23,7 +25,6 @@ class HPGauge
 		this.sectorSize = options.sectorSize !== undefined ? options.sectorSize : 100;
 		this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
 		let color = options.color !== undefined ? options.color : Color.Chartreuse;
-		let priority = options.priority !== undefined ? options.priority : 0;
 
 		this.borderColor = Color.Black.fade(color.a);
 		this.colorFadeDuration = 0;
@@ -45,9 +46,8 @@ class HPGauge
 		this.oldReading = this.capacity;
 		this.reading = this.capacity;
 		this.sectorSize = this.sectorSize;
-
-		this.updateJob = Dispatch.onUpdate(() => this.update(), priority);
-		this.renderJob = Dispatch.onRender(() => this.render(), priority);
+		
+		this.start();
 	}
 	
 	dispose()
@@ -116,7 +116,7 @@ class HPGauge
 		++this.numCombosRunning;
 	}
 
-	render()
+	on_render()
 	{
 		if (this.fadeness >= 1.0)
 			return;  // invisible, skip rendering
@@ -148,13 +148,13 @@ class HPGauge
 		let emptyColor = fadeColor(this.emptyColor, this.fadeness);
 		let usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
 		if (barInUse < this.sectorSize && numReservesFilled > 0) {
-			prim.lineRect(screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
+			Prim.lineRect(screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
 			drawSegment(this.x + 1, this.y + 1, this.width - 2, barHeight - 2, Color.mix(fillColor, Color.Transparent, 50, 50));
 		}
 		let barEdgeX = this.x + this.width - 1;
-		prim.lineRect(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
+		Prim.lineRect(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
 		drawSegment(barEdgeX - fillWidth, this.y + 1, fillWidth, barHeight - 2, fillColor);
-		prim.rect(screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
+		Prim.rect(screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
 		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, this.y + 1, emptyWidth, barHeight - 2, emptyColor);
 		let slotYSize = this.height - barHeight + 1;
 		let slotXSize = this.maxSectors === 'auto'
@@ -162,8 +162,8 @@ class HPGauge
 			: Math.ceil(this.width / (this.maxSectors - 1));
 		let slotX;
 		let slotY = this.y + this.height - slotYSize;
-		prim.rect(screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
-		prim.rect(screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
+		Prim.rect(screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
+		Prim.rect(screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
 		for (let i = 0; i < numReserves; ++i) {
 			let color;
 			if (i < numReservesFilled) {
@@ -174,15 +174,15 @@ class HPGauge
 				color = emptyColor;
 			}
 			slotX = this.x + (this.width - slotXSize) - (i + 1) * (slotXSize - 1);
-			prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
+			Prim.lineRect(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
 			if (color != usageColor)
 				drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 			else
-				prim.rect(screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
+				Prim.rect(screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 		}
 	}
 
-	update()
+	on_update()
 	{
 		++this.colorFadeTimer;
 		if (this.colorFadeDuration != 0 && this.colorFadeTimer < this.colorFadeDuration) {
@@ -217,8 +217,8 @@ function drawSegment(x, y, width, height, color)
 	let bottomHeight = height - topHeight;
 	let yBottom = y + topHeight;
 	let dimColor = Color.mix(color, Color.Black.fade(color.a), 66, 33);
-	prim.rect(screen, x, y, width, topHeight, dimColor, dimColor, color, color);
-	prim.rect(screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
+	Prim.rect(screen, x, y, width, topHeight, dimColor, dimColor, color, color);
+	Prim.rect(screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
 };
 
 function fadeColor(color, fadeness)

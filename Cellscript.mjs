@@ -6,8 +6,9 @@
 
 import { transpile } from 'compiler';
 
-describe("kh2Bar Showcase",
+Object.assign(Sphere.Game,
 {
+	name:       "kh2Bar Showcase",
 	author:     "Fat Cerberus",
 	resolution: '320x240',
 	main:       'bin/main.js',
