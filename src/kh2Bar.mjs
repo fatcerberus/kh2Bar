@@ -52,11 +52,13 @@ class HPGauge extends Thread
 	
 	dispose()
 	{
-		Dispatch.cancel(this.updateJob);
-		Dispatch.cancel(this.renderJob);
+		this.stop();
 	}
 
-	get inCombo() { return this.numCombosRunning > 0; }
+	get inCombo()
+	{
+		return this.numCombosRunning > 0;
+	}
 
 	changeColor(color, numFrames = 0)
 	{

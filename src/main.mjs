@@ -20,7 +20,7 @@ const GaugeColors =
 ];
 
 export default
-class Game extends Thread
+class Showcase extends Thread
 {
 	static Wallpaper = new Texture('images/saiyan.png');
 
@@ -82,7 +82,7 @@ class Game extends Thread
 
 	on_render()
 	{
-		Prim.blit(screen, 0, 0, Game.Wallpaper);
+		Prim.blit(screen, 0, 0, Showcase.Wallpaper);
 		Prim.rect(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
 		drawShadowText(screen, 10, 100, "press Z to attack");
 		drawShadowText(screen, 10, 112, "press X to crit");
