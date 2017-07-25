@@ -5,7 +5,6 @@
 **/
 
 import { Prim, Random, Thread } from 'sphere-runtime';
-
 import { HPGauge } from './kh2Bar';
 
 // let me just say how awesome it is that KH uses chartreuse to
@@ -83,7 +82,7 @@ class Showcase extends Thread
 	on_render()
 	{
 		Prim.blit(screen, 0, 0, Showcase.Wallpaper);
-		Prim.rect(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
+		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
 		drawShadowText(screen, 10, 100, "press Z to attack");
 		drawShadowText(screen, 10, 112, "press X to crit");
 		drawShadowText(screen, 10, 124, "press V to show/hide");
