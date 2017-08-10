@@ -11,7 +11,7 @@ class HPGauge extends Thread
 {
 	constructor(x, y, width, height, options = {})
 	{
-		super({ priority: options.priority });
+		super(options);
 
 		this.x = x;
 		this.y = y;

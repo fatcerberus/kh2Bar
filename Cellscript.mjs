@@ -4,7 +4,7 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import { transpile } from 'compiler';
+import { transpile } from 'cell-runtime';
 
 Object.assign(Sphere.Game,
 {
