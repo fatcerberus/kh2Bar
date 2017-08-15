@@ -17,3 +17,4 @@ Object.assign(Sphere.Game,
 transpile('@/bin', files('src/*.mjs', true));
 
 install('@/images', files('images/*.png', true));
+install('@/sounds', files('sounds/*.wav', true));

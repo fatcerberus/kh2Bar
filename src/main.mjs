@@ -4,8 +4,9 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import { Prim, Random, Thread } from 'sphere-runtime';
-import { HPGauge } from './kh2Bar';
+import { Image, Prim, Random, Thread } from 'sphere-runtime';
+
+import { HPGauge } from '$/kh2Bar';
 
 // let me just say how awesome it is that KH uses chartreuse to
 // color HP gauges rather than pure green.  very classy.
@@ -21,7 +22,8 @@ const GaugeColors =
 export default
 class Showcase extends Thread
 {
-	static Wallpaper = new Texture('images/saiyan.png');
+	static MunchSound = new Sample('sounds/munch.wav');
+	static Wallpaper = new Image('justSaiyan');
 
 	constructor()
 	{
@@ -59,6 +61,7 @@ class Showcase extends Thread
 				this.lifeBar.set(this.hp);
 				break;
 			case Key.X:
+				Showcase.MunchSound.play(Mixer.Default);
 				damage = Math.round(Random.discrete(20, 30));
 				this.hp = Math.max(this.hp - damage, 0);
 				this.lifeBar.set(this.hp);
@@ -81,7 +84,7 @@ class Showcase extends Thread
 
 	on_render()
 	{
-		Prim.blit(screen, 0, 0, Showcase.Wallpaper);
+		Showcase.Wallpaper.blitTo(screen, 0, 0);
 		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
 		drawShadowText(screen, 10, 100, "press Z to attack");
 		drawShadowText(screen, 10, 112, "press X to crit");
