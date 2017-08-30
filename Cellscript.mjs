@@ -11,7 +11,7 @@ Object.assign(Sphere.Game,
 	name:       "kh2Bar Showcase",
 	author:     "Fat Cerberus",
 	resolution: '320x240',
-	main:       'bin/main.js',
+	main:       '@/bin/main.js',
 });
 
 transpile('@/bin', files('src/*.mjs', true));

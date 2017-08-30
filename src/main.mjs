@@ -10,8 +10,10 @@ import { HPGauge } from '$/kh2Bar';
 
 // let me just say how awesome it is that KH uses chartreuse to
 // color HP gauges rather than pure green.  very classy.
-const GaugeColors =
-[
+const MunchSound = new Sample('sounds/munch.wav'),
+      Wallpaper = new Image('justSaiyan');
+
+const GaugeColors = [
 	Color.Chartreuse,
 	Color.PurwaBlue,
 	Color.Yellow,
@@ -19,12 +21,9 @@ const GaugeColors =
 	Color.HotPink,
 ];
 
-export default
+export
 class Showcase extends Thread
 {
-	static MunchSound = new Sample('sounds/munch.wav');
-	static Wallpaper = new Image('justSaiyan');
-
 	constructor()
 	{
 		super({ priority: 0 });
@@ -43,7 +42,7 @@ class Showcase extends Thread
 			priority:   1,
 		});
 		this.lifeBar.show();
-	}
+	};
 
 	on_update()
 	{
@@ -61,7 +60,7 @@ class Showcase extends Thread
 				this.lifeBar.set(this.hp);
 				break;
 			case Key.X:
-				Showcase.MunchSound.play(Mixer.Default);
+				MunchSound.play(Mixer.Default);
 				damage = Math.round(Random.discrete(20, 30));
 				this.hp = Math.max(this.hp - damage, 0);
 				this.lifeBar.set(this.hp);
@@ -80,17 +79,17 @@ class Showcase extends Thread
 					this.lifeBar.hide(0.25);
 				break;
 		}
-	}
+	};
 
 	on_render()
 	{
-		Showcase.Wallpaper.blitTo(screen, 0, 0);
+		Wallpaper.blitTo(screen, 0, 0);
 		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
 		drawShadowText(screen, 10, 100, "press Z to attack");
 		drawShadowText(screen, 10, 112, "press X to crit");
 		drawShadowText(screen, 10, 124, "press V to show/hide");
 		drawShadowText(screen, 10, 136, "press C to recolor");
-	}
+	};
 }
 
 function drawShadowText(surface, x, y, text, color = Color.White)
