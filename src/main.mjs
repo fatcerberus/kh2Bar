@@ -8,12 +8,13 @@ import { Image, Prim, Random, Thread } from 'sphere-runtime';
 
 import { HPGauge } from '$/kh2Bar';
 
-// let me just say how awesome it is that KH uses chartreuse to
-// color HP gauges rather than pure green.  very classy.
 const MunchSound = new Sample('sounds/munch.wav'),
       Wallpaper = new Image('justSaiyan');
 
-const GaugeColors = [
+// let me just say how awesome it is that KH uses chartreuse to
+// color HP gauges rather than pure green.  very classy.
+const GaugeColors =
+[
 	Color.Chartreuse,
 	Color.PurwaBlue,
 	Color.Yellow,
@@ -21,7 +22,7 @@ const GaugeColors = [
 	Color.HotPink,
 ];
 
-export
+export default
 class Showcase extends Thread
 {
 	constructor()
