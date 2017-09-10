@@ -4,17 +4,15 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import { transpile } from 'cell-runtime';
-
 Object.assign(Sphere.Game,
 {
 	name:       "kh2Bar Showcase",
 	author:     "Fat Cerberus",
 	resolution: '320x240',
-	main:       '@/bin/main.js',
+	main:       '@/bin/main.mjs',
 });
 
-transpile('@/bin', files('src/*.mjs', true));
+install('@/bin', files('src/*.mjs', true));
 
 install('@/images', files('images/*.png', true));
 install('@/sounds', files('sounds/*.wav', true));
