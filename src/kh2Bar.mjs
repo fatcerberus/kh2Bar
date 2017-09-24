@@ -26,14 +26,14 @@ class HPGauge extends Thread
 		this.maxSectors = options.maxSectors !== undefined ? options.maxSectors : 'auto';
 		let color = options.color !== undefined ? options.color : Color.Chartreuse;
 
-		this.borderColor = Color.Black.fade(color.a);
+		this.borderColor = Color.Black.fadeTo(color.a);
 		this.colorFadeDuration = 0;
 		this.colorFadeTimer = 0;
 		this.damage = 0;
-		this.damageColor = Color.DarkRed.fade(color.a);
+		this.damageColor = Color.DarkRed.fadeTo(color.a);
 		this.damageFadeness = 1.0;
 		this.drainSpeed = 3.0;
-		this.emptyColor = Color.of('#303030').fade(color.a);
+		this.emptyColor = Color.of('#303030').fadeTo(color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
 		this.hpColor = color.clone();
@@ -213,14 +213,14 @@ function drawSegment(x, y, width, height, color)
 	let topHeight = Math.ceil(height / 8);
 	let bottomHeight = height - topHeight;
 	let yBottom = y + topHeight;
-	let dimColor = Color.mix(color, Color.Black.fade(color.a), 66, 33);
+	let dimColor = Color.mix(color, Color.Black.fadeTo(color.a), 66, 33);
 	Prim.drawSolidRectangle(screen, x, y, width, topHeight, dimColor, dimColor, color, color);
 	Prim.drawSolidRectangle(screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
 };
 
 function fadeColor(color, fadeness)
 {
-	return color.fade(1.0 - fadeness);
+	return color.fadeTo(1.0 - fadeness);
 }
 
 function tween(start, time, duration, end)

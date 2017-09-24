@@ -85,7 +85,7 @@ class Showcase extends Thread
 	on_render()
 	{
 		Wallpaper.blitTo(screen, 0, 0);
-		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fade(0.5));
+		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fadeTo(0.5));
 		drawShadowText(screen, 10, 100, "press Z to attack");
 		drawShadowText(screen, 10, 112, "press X to crit");
 		drawShadowText(screen, 10, 124, "press V to show/hide");
@@ -95,6 +95,6 @@ class Showcase extends Thread
 
 function drawShadowText(surface, x, y, text, color = Color.White)
 {
-	Font.Default.drawText(surface, x + 1, y + 1, text, Color.Black.fade(color.a));
+	Font.Default.drawText(surface, x + 1, y + 1, text, Color.Black.fadeTo(color.a));
 	Font.Default.drawText(surface, x, y, text, color);
 }
