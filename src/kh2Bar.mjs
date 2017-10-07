@@ -191,15 +191,15 @@ class HPGauge extends Thread
 			this.hpColor = this.newColor;
 			this.colorFadeDuration = 0;
 		}
-		this.fadeness = Math.min(Math.max(this.fadeness + this.fadeSpeed / screen.frameRate, 0.0), 1.0);
-		this.drainTimer += this.drainSpeed / screen.frameRate;
+		this.fadeness = Math.min(Math.max(this.fadeness + this.fadeSpeed / Sphere.frameRate, 0.0), 1.0);
+		this.drainTimer += this.drainSpeed / Sphere.frameRate;
 		if (this.newReading != this.reading && this.drainTimer < 0.25) {
 			this.reading = Math.round(tween(this.oldReading, this.drainTimer, 0.25, this.newReading));
 		} else {
 			this.reading = this.newReading;
 		}
 		if (this.numCombosRunning <= 0 && this.reading == this.newReading) {
-			this.damageFadeness += this.drainSpeed / screen.frameRate;
+			this.damageFadeness += this.drainSpeed / Sphere.frameRate;
 			if (this.damageFadeness >= 1.0) {
 				this.damage = 0;
 				this.damageFadeness = 1.0;

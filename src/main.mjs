@@ -6,7 +6,7 @@
 
 import { Image, Prim, Random, Thread } from 'sphere-runtime';
 
-import { HPGauge } from '$/kh2Bar';
+import { HPGauge } from './kh2Bar.mjs';
 
 const MunchSound = new Sample('sounds/munch.wav'),
       Wallpaper = new Image('justSaiyan');
@@ -47,7 +47,7 @@ class Showcase extends Thread
 
 	on_update()
 	{
-		if (this.lifeBar.inCombo && screen.now() >= this.comboTimer + 30)
+		if (this.lifeBar.inCombo && Sphere.now() >= this.comboTimer + 30)
 			this.lifeBar.endCombo();
 		let key = Keyboard.Default.getKey();
 		let damage;
@@ -55,7 +55,7 @@ class Showcase extends Thread
 			case Key.Z:
 				damage = Math.round(Random.discrete(1, 3));
 				this.hp = Math.max(this.hp - damage, 0);
-				this.comboTimer = screen.now();
+				this.comboTimer = Sphere.now();
 				if (!this.lifeBar.inCombo)
 					this.lifeBar.startCombo();
 				this.lifeBar.set(this.hp);
