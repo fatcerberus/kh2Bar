@@ -84,12 +84,12 @@ class Showcase extends Thread
 
 	on_render()
 	{
-		Wallpaper.blitTo(screen, 0, 0);
-		Prim.drawSolidRectangle(screen, 5, 95, 148, 58, Color.Black.fadeTo(0.5));
-		drawShadowText(screen, 10, 100, "press Z to attack");
-		drawShadowText(screen, 10, 112, "press X to crit");
-		drawShadowText(screen, 10, 124, "press V to show/hide");
-		drawShadowText(screen, 10, 136, "press C to recolor");
+		Wallpaper.blitTo(Surface.Screen, 0, 0);
+		Prim.drawSolidRectangle(Surface.Screen, 5, 95, 148, 58, Color.Black.fadeTo(0.5));
+		drawShadowText(Surface.Screen, 10, 100, "press Z to attack");
+		drawShadowText(Surface.Screen, 10, 112, "press X to crit");
+		drawShadowText(Surface.Screen, 10, 124, "press V to show/hide");
+		drawShadowText(Surface.Screen, 10, 136, "press C to recolor");
 	};
 }
 

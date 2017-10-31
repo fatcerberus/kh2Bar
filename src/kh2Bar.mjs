@@ -145,13 +145,13 @@ class HPGauge extends Thread
 		let emptyColor = fadeColor(this.emptyColor, this.fadeness);
 		let usageColor = Color.mix(emptyColor, fadeColor(this.damageColor, this.fadeness), this.damageFadeness, 1.0 - this.damageFadeness);
 		if (barInUse < this.sectorSize && numReservesFilled > 0) {
-			Prim.drawRectangle(screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
+			Prim.drawRectangle(Surface.Screen, this.x, this.y, this.width, barHeight, 1, Color.mix(borderColor, Color.Transparent, 50, 50));
 			drawSegment(this.x + 1, this.y + 1, this.width - 2, barHeight - 2, Color.mix(fillColor, Color.Transparent, 50, 50));
 		}
 		let barEdgeX = this.x + this.width - 1;
-		Prim.drawRectangle(screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
+		Prim.drawRectangle(Surface.Screen, barEdgeX - widthInUse - 1, this.y, widthInUse + 2, barHeight, 1, borderColor);
 		drawSegment(barEdgeX - fillWidth, this.y + 1, fillWidth, barHeight - 2, fillColor);
-		Prim.drawSolidRectangle(screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
+		Prim.drawSolidRectangle(Surface.Screen, barEdgeX - fillWidth - damageWidth, this.y + 1, damageWidth, barHeight - 2, usageColor);
 		drawSegment(barEdgeX - fillWidth - damageWidth - emptyWidth, this.y + 1, emptyWidth, barHeight - 2, emptyColor);
 		let slotYSize = this.height - barHeight + 1;
 		let slotXSize = this.maxSectors === 'auto'
@@ -159,8 +159,8 @@ class HPGauge extends Thread
 			: Math.ceil(this.width / (this.maxSectors - 1));
 		let slotX;
 		let slotY = this.y + this.height - slotYSize;
-		Prim.drawSolidRectangle(screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
-		Prim.drawSolidRectangle(screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
+		Prim.drawSolidRectangle(Surface.Screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
+		Prim.drawSolidRectangle(Surface.Screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
 		for (let i = 0; i < numReserves; ++i) {
 			let color;
 			if (i < numReservesFilled) {
@@ -171,11 +171,11 @@ class HPGauge extends Thread
 				color = emptyColor;
 			}
 			slotX = this.x + (this.width - slotXSize) - (i + 1) * (slotXSize - 1);
-			Prim.drawRectangle(screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
+			Prim.drawRectangle(Surface.Screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
 			if (color != usageColor)
 				drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 			else
-				Prim.drawSolidRectangle(screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
+				Prim.drawSolidRectangle(Surface.Screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 		}
 	}
 
@@ -214,8 +214,8 @@ function drawSegment(x, y, width, height, color)
 	let bottomHeight = height - topHeight;
 	let yBottom = y + topHeight;
 	let dimColor = Color.mix(color, Color.Black.fadeTo(color.a), 66, 33);
-	Prim.drawSolidRectangle(screen, x, y, width, topHeight, dimColor, dimColor, color, color);
-	Prim.drawSolidRectangle(screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
+	Prim.drawSolidRectangle(Surface.Screen, x, y, width, topHeight, dimColor, dimColor, color, color);
+	Prim.drawSolidRectangle(Surface.Screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
 };
 
 function fadeColor(color, fadeness)
