@@ -32,7 +32,7 @@ class HPGauge extends Thread
 		this.damage = 0;
 		this.damageColor = Color.DarkRed.fadeTo(color.a);
 		this.damageFadeness = 1.0;
-		this.drainSpeed = 3.0;
+		this.drainSpeed = 2.0;
 		this.emptyColor = Color.of('#303030').fadeTo(color.a);
 		this.fadeSpeed = 0.0;
 		this.fadeness = 1.0;
@@ -160,7 +160,7 @@ class HPGauge extends Thread
 		let slotX;
 		let slotY = this.y + this.height - slotYSize;
 		Prim.drawSolidRectangle(Surface.Screen, this.x + (this.width - slotXSize), slotY, slotXSize, slotYSize, borderColor);
-		Prim.drawSolidRectangle(Surface.Screen, this.x + (this.width - slotXSize) + 2, slotY + 2, slotXSize - 4, slotYSize - 4, Color.Silver);
+		Prim.drawRectangle(Surface.Screen, this.x + (this.width - slotXSize) + 1, slotY + 1, slotXSize - 2, slotYSize - 2, 1, Color.Silver);
 		for (let i = 0; i < numReserves; ++i) {
 			let color;
 			if (i < numReservesFilled) {
