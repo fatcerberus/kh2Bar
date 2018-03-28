@@ -4,12 +4,11 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import { Image, Prim, Random, Thread } from 'sphere-runtime';
+import { Kami, Prim, Random, Thread } from 'sphere-runtime';
 
 import { HPGauge } from './kh2Bar.mjs';
 
-const MunchSound = new Sample('sounds/munch.wav'),
-      Wallpaper = new Image('justSaiyan');
+const Wallpaper = new Texture('@/images/justSaiyan.png');
 
 // let me just say how awesome it is that KH uses chartreuse to
 // color HP gauges rather than pure green.  very classy.
@@ -33,6 +32,8 @@ class Showcase extends Thread
 		this.comboTimer = 0;
 		this.hp = 812;
 		this.isHidden = false;
+
+		Kami.attachClass(HPGauge);
 
 		// construct a new HP gauge and make it visible
 		this.lifeBar = new HPGauge(160, 10, 150, 12, {
@@ -61,7 +62,6 @@ class Showcase extends Thread
 				this.lifeBar.set(this.hp);
 				break;
 			case Key.X:
-				MunchSound.play(Mixer.Default);
 				damage = Math.round(Random.discrete(20, 30));
 				this.hp = Math.max(this.hp - damage, 0);
 				this.lifeBar.set(this.hp);
@@ -84,7 +84,7 @@ class Showcase extends Thread
 
 	on_render()
 	{
-		Wallpaper.blitTo(Surface.Screen, 0, 0);
+		Prim.blit(Surface.Screen, 0, 0, Wallpaper);
 		Prim.drawSolidRectangle(Surface.Screen, 5, 95, 148, 58, Color.Black.fadeTo(0.5));
 		drawShadowText(Surface.Screen, 10, 100, "press Z to attack");
 		drawShadowText(Surface.Screen, 10, 112, "press X to crit");
