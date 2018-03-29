@@ -44,7 +44,7 @@ class Showcase extends Thread
 			priority:   1,
 		});
 		this.lifeBar.show();
-	};
+	}
 
 	on_update()
 	{
@@ -80,7 +80,7 @@ class Showcase extends Thread
 					this.lifeBar.hide(0.25);
 				break;
 		}
-	};
+	}
 
 	on_render()
 	{
@@ -90,7 +90,7 @@ class Showcase extends Thread
 		drawShadowText(Surface.Screen, 10, 112, "press X to crit");
 		drawShadowText(Surface.Screen, 10, 124, "press V to show/hide");
 		drawShadowText(Surface.Screen, 10, 136, "press C to recolor");
-	};
+	}
 }
 
 function drawShadowText(surface, x, y, text, color = Color.White)

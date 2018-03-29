@@ -46,7 +46,7 @@ class HPGauge extends Thread
 		this.oldReading = this.capacity;
 		this.reading = this.capacity;
 		this.sectorSize = this.sectorSize;
-		
+
 		this.start();
 	}
 
@@ -59,7 +59,7 @@ class HPGauge extends Thread
 	{
 		this.oldColor = this.hpColor.clone();
 		this.newColor = color.clone();
-		if (numFrames != 0) {
+		if (numFrames !== 0) {
 			this.colorFadeDuration = numFrames;
 			this.colorFadeTimer = 0;
 		} else {
@@ -86,7 +86,7 @@ class HPGauge extends Thread
 	set(value)
 	{
 		value = Math.min(Math.max(Math.round(value), 0), this.capacity);
-		if (value != this.reading) {
+		if (value !== this.reading) {
 			if (this.numCombosRunning > 0)
 				this.damage += this.newReading - value;
 			else
@@ -122,18 +122,16 @@ class HPGauge extends Thread
 		let numReservesFilled = Math.max(Math.ceil(this.reading / this.sectorSize - 1), 0);
 		let numReservesDamaged = Math.ceil((damageShown + this.reading) / this.sectorSize - 1);
 		let barInUse;
-		if (numReservesFilled == numReserves) {
+		if (numReservesFilled === numReserves) {
 			barInUse = this.capacity % this.sectorSize;
-			if (barInUse == 0) {
+			if (barInUse === 0)
 				barInUse = this.sectorSize;
-			}
 		} else {
 			barInUse = this.sectorSize;
 		}
 		let barFilled = this.reading % this.sectorSize;
-		if (barFilled == 0 && this.reading > 0) {
+		if (barFilled === 0 && this.reading > 0)
 			barFilled = barInUse;
-		}
 		let barDamaged = Math.min(damageShown, this.sectorSize - barFilled) * (1.0 - this.damageFadeness);
 		let barHeight = Math.ceil(this.height * 0.5 + 0.5);
 		let widthInUse = Math.round((this.width - 2) * barInUse / this.sectorSize);
@@ -163,16 +161,15 @@ class HPGauge extends Thread
 		Prim.drawRectangle(Surface.Screen, this.x + (this.width - slotXSize) + 1, slotY + 1, slotXSize - 2, slotYSize - 2, 1, Color.Silver);
 		for (let i = 0; i < numReserves; ++i) {
 			let color;
-			if (i < numReservesFilled) {
+			if (i < numReservesFilled)
 				color = fillColor;
-			} else if (i < numReservesDamaged) {
+			else if (i < numReservesDamaged)
 				color = usageColor;
-			} else {
+			else
 				color = emptyColor;
-			}
 			slotX = this.x + (this.width - slotXSize) - (i + 1) * (slotXSize - 1);
 			Prim.drawRectangle(Surface.Screen, slotX, slotY, slotXSize, slotYSize, 1, borderColor);
-			if (color != usageColor)
+			if (color !== usageColor)
 				drawSegment(slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
 			else
 				Prim.drawSolidRectangle(Surface.Screen, slotX + 1, slotY + 1, slotXSize - 2, slotYSize - 2, color);
@@ -182,7 +179,7 @@ class HPGauge extends Thread
 	on_update()
 	{
 		++this.colorFadeTimer;
-		if (this.colorFadeDuration != 0 && this.colorFadeTimer < this.colorFadeDuration) {
+		if (this.colorFadeDuration !== 0 && this.colorFadeTimer < this.colorFadeDuration) {
 			this.hpColor.r = tween(this.oldColor.r, this.colorFadeTimer, this.colorFadeDuration, this.newColor.r);
 			this.hpColor.g = tween(this.oldColor.g, this.colorFadeTimer, this.colorFadeDuration, this.newColor.g);
 			this.hpColor.b = tween(this.oldColor.b, this.colorFadeTimer, this.colorFadeDuration, this.newColor.b);
@@ -193,12 +190,11 @@ class HPGauge extends Thread
 		}
 		this.fadeness = Math.min(Math.max(this.fadeness + this.fadeSpeed / Sphere.frameRate, 0.0), 1.0);
 		this.drainTimer += this.drainSpeed / Sphere.frameRate;
-		if (this.newReading != this.reading && this.drainTimer < 0.25) {
+		if (this.newReading !== this.reading && this.drainTimer < 0.25)
 			this.reading = Math.round(tween(this.oldReading, this.drainTimer, 0.25, this.newReading));
-		} else {
+		else
 			this.reading = this.newReading;
-		}
-		if (this.numCombosRunning <= 0 && this.reading == this.newReading) {
+		if (this.numCombosRunning <= 0 && this.reading === this.newReading) {
 			this.damageFadeness += this.drainSpeed / Sphere.frameRate;
 			if (this.damageFadeness >= 1.0) {
 				this.damage = 0;
@@ -216,7 +212,7 @@ function drawSegment(x, y, width, height, color)
 	let dimColor = Color.mix(color, Color.Black.fadeTo(color.a), 66, 33);
 	Prim.drawSolidRectangle(Surface.Screen, x, y, width, topHeight, dimColor, dimColor, color, color);
 	Prim.drawSolidRectangle(Surface.Screen, x, yBottom, width, bottomHeight, color, color, dimColor, dimColor);
-};
+}
 
 function fadeColor(color, fadeness)
 {
