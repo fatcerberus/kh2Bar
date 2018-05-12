@@ -4,7 +4,7 @@
  *  (c) 2013-2017 Bruce Pascoe
 **/
 
-import { Kami, Prim, Random, Thread } from 'sphere-runtime';
+import { Prim, Random, Thread } from 'sphere-runtime';
 
 import { HPGauge } from './kh2Bar.mjs';
 
@@ -32,8 +32,6 @@ class Showcase extends Thread
 		this.comboTimer = 0;
 		this.hp = 812;
 		this.isHidden = false;
-
-		Kami.attachClass(HPGauge);
 
 		// construct a new HP gauge and make it visible
 		this.lifeBar = new HPGauge(160, 10, 150, 12, {
