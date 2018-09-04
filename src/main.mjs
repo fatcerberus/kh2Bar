@@ -15,7 +15,7 @@ const Wallpaper = new Texture('@/images/justSaiyan.png');
 const GaugeColors =
 [
 	Color.Chartreuse,
-	Color.PurwaBlue,
+	Color.LightSkyBlue,
 	Color.Yellow,
 	Color.Salmon,
 	Color.HotPink,
