@@ -1,7 +1,7 @@
 /**
  *  kh2Bar JavaScript module for Sphere
  *  Kingdom Hearts-style HP gauges with multiple lifebars
- *  (c) 2013-2018 Bruce Pascoe
+ *  (c) 2013-2019 Bruce Pascoe
 **/
 
 import { Prim, Thread } from 'sphere-runtime';

@@ -1,12 +1,12 @@
 /**
  *  kh2Bar showcase demo for Sphere v2
  *  Kingdom Hearts-style HP gauge with multiple lifebars
- *  (c) 2013-2017 Bruce Pascoe
+ *  (c) 2013-2019 Bruce Pascoe
 **/
 
 import { Prim, Random, Thread } from 'sphere-runtime';
 
-import { HPGauge } from './kh2Bar.mjs';
+import { HPGauge } from './kh2Bar.js';
 
 const Wallpaper = new Texture('@/images/justSaiyan.png');
 

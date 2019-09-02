@@ -5,13 +5,14 @@
 **/
 
 Object.assign(Sphere.Game, {
-	version: 2, apiLevel: 1,
+	version: 2,
+	apiLevel: 1,
 
 	name: "kh2Bar Showcase",
 	author: "Fat Cerberus",
 	resolution: '320x240',
-	main: '@/bin/main.mjs',
+	main: '@/bin/main.js',
 });
 
-install('@/bin',    files('src/*.mjs', true));
+install('@/bin',    files('src/*.js', true));
 install('@/images', files('images/*.png', true));
