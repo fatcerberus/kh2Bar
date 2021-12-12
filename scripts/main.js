@@ -1,7 +1,7 @@
 /**
- *  kh2Bar showcase demo for Sphere v2
+ *  kh2Bar HP gauge demo for Sphere
  *  Kingdom Hearts-style HP gauge with multiple lifebars
- *  (c) 2013-2019 Bruce Pascoe
+ *  (c) 2013-2021 Bruce Pascoe
 **/
 
 import { Prim, Random, Thread } from 'sphere-runtime';

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "apiLevel": 1,
+  "name": "kh2Bar Showcase",
+  "author": "Fat Cerberus",
+  "description": "A demonstration of kh2Bar Kingdom Hearts-style HP gauges.",
+  "resolution": "320x240",
+  "main": "scripts/main.js",
+  "saveID": "kh2Bar Showcase"
+}
