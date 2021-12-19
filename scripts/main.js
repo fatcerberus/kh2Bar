@@ -8,8 +8,6 @@ import { Prim, Random, Thread } from 'sphere-runtime';
 
 import { HPGauge } from './kh2Bar.js';
 
-const Wallpaper = new Texture('@/images/justSaiyan.png');
-
 // let me just say how awesome it is that KH uses chartreuse to
 // color HP gauges rather than pure green.  very classy.
 const GaugeColors =
@@ -42,6 +40,11 @@ class Showcase extends Thread
 			priority:   1,
 		});
 		this.lifeBar.show();
+	}
+	
+	async on_startUp()
+	{
+		this.wallpaper = await Texture.fromFile('images/justSaiyan.png');
 	}
 
 	on_update()
@@ -82,7 +85,7 @@ class Showcase extends Thread
 
 	on_render()
 	{
-		Prim.blit(Surface.Screen, 0, 0, Wallpaper);
+		Prim.blit(Surface.Screen, 0, 0, this.wallpaper);
 		Prim.drawSolidRectangle(Surface.Screen, 5, 95, 148, 58, Color.Black.fadeTo(0.5));
 		drawShadowText(Surface.Screen, 10, 100, "press Z to attack");
 		drawShadowText(Surface.Screen, 10, 112, "press X to crit");

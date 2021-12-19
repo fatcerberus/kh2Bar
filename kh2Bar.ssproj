@@ -1,10 +1,11 @@
 [.ssproj]
-apiLevel=1
+apiLevel=3
 apiVersion=2
 author=Fat Cerberus
 compiler=Sphere Classic
 description=A demonstration of kh2Bar Kingdom Hearts-style HP gauges.
 mainScript=scripts/main.js
+manageGameJson=True
 name=kh2Bar Showcase
 resolution=320x240
 saveID=kh2Bar Showcase

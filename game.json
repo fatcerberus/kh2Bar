@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "apiLevel": 1,
+  "apiLevel": 3,
   "name": "kh2Bar Showcase",
   "author": "Fat Cerberus",
   "description": "A demonstration of kh2Bar Kingdom Hearts-style HP gauges.",
